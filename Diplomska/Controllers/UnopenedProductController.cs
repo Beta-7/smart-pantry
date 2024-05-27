@@ -11,52 +11,45 @@ public class UnopenProductController : ControllerBase
 {
 
     private readonly ILogger<UnopenProductController> _logger;
-    private readonly IProductService _productService;
-
-    public UnopenProductController(ILogger<UnopenProductController> logger, IProductService productService)
+    private readonly IUnopenedProductService _unopenedProductService;
+    public UnopenProductController(ILogger<UnopenProductController> logger, IUnopenedProductService unopenedProductService)
     {
         _logger = logger;
-        _productService = productService;
+        _unopenedProductService = unopenedProductService;
     }
 
     [HttpPost]
-    public void AddProduct(string name, string barcode, int expirationDaysAfterOpen, decimal packagingWeight, decimal weight)
+    public void AddProduct(Guid productId, int quantity, DateOnly expirationDate)
     {
-        var newProduct = new Product
+        var newProduct = new UnopenedProduct
         {
-            Name = name,
-            Barcode = barcode,
-            ExpirationDaysAfterOpen = expirationDaysAfterOpen,
-            PackagingWeight = packagingWeight,
-            Weight = weight
+            ProductId = productId,
+            Quantity = quantity,
+            ExpirationDate = expirationDate
         };
-        _productService.Add(newProduct);
+        _unopenedProductService.Add(newProduct);
     }
     
-    [HttpGet(Name = "all")]
-    public IEnumerable<Product> GetAll()
+    [HttpGet]
+    public IEnumerable<UnopenedProduct> GetAll()
     {
-        return _productService.GetAll();
+        return _unopenedProductService.GetAll();
     }
 
     [HttpDelete]
     public void Delete(Guid productId)
     {
-        _productService.Delete(productId);
+        _unopenedProductService.Delete(productId);
     }
 
-    [HttpPost]
-    public void Update(Guid productId, string name, string barcode, int expirationDaysAfterOpen,
-        decimal packagingWeight, decimal weight)
+    [HttpPost("{productId}")]
+    public void Update([FromRoute] Guid productId, int quantity, DateOnly expirationDate)
     {
-        var product = new Product
+        var product = new UnopenedProduct
         {
-            Name = name,
-            Barcode = barcode,
-            ExpirationDaysAfterOpen = expirationDaysAfterOpen,
-            PackagingWeight = packagingWeight,
-            Weight = weight
+            Quantity = quantity,
+            ExpirationDate = expirationDate
         };
-        _productService.Update(productId, product);
+        _unopenedProductService.Update(productId, product);
     }
 }

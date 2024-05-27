@@ -1,6 +1,7 @@
 using Diplomska.Persistence.Models;
+using Diplomska.Persistence.Services.Interfaces;
 
-namespace Diplomska.Persistence.Services.Interfaces;
+namespace Diplomska.Persistence.Services;
 
 public class FridgeService: IFridgeService  
 {
@@ -61,6 +62,10 @@ public class FridgeService: IFridgeService
     public void UseProduct(Guid openedProductId, decimal weight)
     {
         var product = _openProductService.GetDetails(openedProductId);
+        if (product is null)
+        {
+            throw new Exception("No product with such id");
+        }
         product.RemainingWeight -= weight;
         if (product.RemainingWeight <= 0)
         {

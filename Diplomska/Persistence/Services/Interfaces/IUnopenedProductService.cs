@@ -11,4 +11,5 @@ public interface IUnopenedProductService
 
     public UnopenedProduct? GetUnopenedProduct(Guid productId);
     public void ConsumeUnopenedProduct(Guid unopenedProductId);
+    public IEnumerable<UnopenedProduct> GetAll();
 }

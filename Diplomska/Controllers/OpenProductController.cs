@@ -1,5 +1,4 @@
 using Diplomska.Persistence.Models;
-using Diplomska.Persistence.Services;
 using Diplomska.Persistence.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,56 +6,52 @@ namespace Diplomska.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ProductController : ControllerBase
+public class OpenProductController : ControllerBase
 {
 
     private readonly ILogger<ProductController> _logger;
-    private readonly IProductService _productService;
+    private readonly IOpenProductService _openProductService;
 
-    public ProductController(ILogger<ProductController> logger, IProductService productService)
+    public OpenProductController(ILogger<ProductController> logger, IOpenProductService openProductService)
     {
         _logger = logger;
-        _productService = productService;
+        _openProductService = openProductService;
     }
 
     [HttpPost]
-    public void AddProduct(string name, string barcode, int expirationDaysAfterOpen, decimal packagingWeight, decimal weight)
+    public void AddProduct(Guid productId, decimal remainingWeight, DateOnly expirationDate, DateOnly openDate)
     {
-        var newProduct = new Product
+        var newProduct = new OpenProduct
         {
-            Name = name,
-            Barcode = barcode,
-            ExpirationDaysAfterOpen = expirationDaysAfterOpen,
-            PackagingWeight = packagingWeight,
-            Weight = weight
+            ProductId = productId,
+            RemainingWeight = remainingWeight,
+            ExpirationDate = expirationDate,
+            OpenDate = openDate
         };
-        _productService.Add(newProduct);
+        _openProductService.Add(newProduct);
     }
     
-    [HttpGet(Name = "all")]
-    public IEnumerable<Product> GetAll()
+    [HttpGet]
+    public IEnumerable<OpenProduct> GetAll()
     {
-        return _productService.GetAll();
+        return _openProductService.GetAll();
     }
 
     [HttpDelete]
     public void Delete(Guid productId)
     {
-        _productService.Delete(productId);
+        _openProductService.Delete(productId);
     }
 
-    [HttpPost]
-    public void Update(Guid productId, string name, string barcode, int expirationDaysAfterOpen,
-        decimal packagingWeight, decimal weight)
+    [HttpPost("{productId}")]
+    public void Update([FromRoute] Guid productId, decimal remainingWeight, DateOnly expirationDate, DateOnly openDate)
     {
-        var product = new Product
+        var product = new OpenProduct
         {
-            Name = name,
-            Barcode = barcode,
-            ExpirationDaysAfterOpen = expirationDaysAfterOpen,
-            PackagingWeight = packagingWeight,
-            Weight = weight
+            RemainingWeight = remainingWeight,
+            ExpirationDate = expirationDate,
+            OpenDate = openDate
         };
-        _productService.Update(productId, product);
+        _openProductService.Update(productId, product);
     }
 }

@@ -72,7 +72,7 @@ public class UnopenedProductService: IUnopenedProductService
 
     public UnopenedProduct? GetUnopenedProduct(Guid productId)
     {
-        return _context.UnopenedProducts.FirstOrDefault(x => x.ProductId == productId && !x.Deleted);
+        return _context.UnopenedProducts.OrderByDescending(x => x.ExpirationDate).FirstOrDefault(x => x.ProductId == productId && !x.Deleted);
     }
 
     public void ConsumeUnopenedProduct(Guid unopenedProductId)
@@ -90,5 +90,10 @@ public class UnopenedProductService: IUnopenedProductService
         }
 
         _context.SaveChanges();
+    }
+
+    public IEnumerable<UnopenedProduct> GetAll()
+    {
+        return _context.UnopenedProducts;
     }
 }

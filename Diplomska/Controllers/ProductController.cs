@@ -1,5 +1,4 @@
 using Diplomska.Persistence.Models;
-using Diplomska.Persistence.Services;
 using Diplomska.Persistence.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,7 +32,7 @@ public class ProductController : ControllerBase
         _productService.Add(newProduct);
     }
     
-    [HttpGet(Name = "all")]
+    [HttpGet]
     public IEnumerable<Product> GetAll()
     {
         return _productService.GetAll();
@@ -45,8 +44,8 @@ public class ProductController : ControllerBase
         _productService.Delete(productId);
     }
 
-    [HttpPost]
-    public void Update(Guid productId, string name, string barcode, int expirationDaysAfterOpen,
+    [HttpPost("{productId}")]
+    public void Update([FromRoute]Guid productId, string name, string barcode, int expirationDaysAfterOpen,
         decimal packagingWeight, decimal weight)
     {
         var product = new Product

@@ -49,6 +49,11 @@ public class OpenProductService: IOpenProductService
         return _context.OpenProducts.FirstOrDefault(x => x.Id == id);
     }
 
+    public IEnumerable<OpenProduct> GetAll()
+    {
+        return _context.OpenProducts;
+    }
+
     public bool Update(Guid id, OpenProduct updatedProduct)
     {
         try
