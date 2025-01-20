@@ -21,7 +21,7 @@ public class OpenProductController : ControllerBase
     [HttpPost]
     public void AddProduct(Guid productId, decimal remainingWeight, DateOnly expirationDate, DateOnly openDate)
     {
-        var newProduct = new OpenProduct
+        var newProduct = new OpenProductDto
         {
             ProductId = productId,
             RemainingWeight = remainingWeight,
@@ -32,7 +32,7 @@ public class OpenProductController : ControllerBase
     }
     
     [HttpGet]
-    public IEnumerable<OpenProduct> GetAll()
+    public IEnumerable<OpenProductDto> GetAll()
     {
         return _openProductService.GetAll();
     }
@@ -46,7 +46,7 @@ public class OpenProductController : ControllerBase
     [HttpPost("{productId}")]
     public void Update([FromRoute] Guid productId, decimal remainingWeight, DateOnly expirationDate, DateOnly openDate)
     {
-        var product = new OpenProduct
+        var product = new OpenProductDto
         {
             RemainingWeight = remainingWeight,
             ExpirationDate = expirationDate,

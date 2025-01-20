@@ -1,5 +1,4 @@
 using Diplomska.Persistence.Models;
-using Diplomska.Persistence.Services;
 using Diplomska.Persistence.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,12 +6,12 @@ namespace Diplomska.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class UnopenProductController : ControllerBase
+public class StockedProductController : ControllerBase
 {
 
-    private readonly ILogger<UnopenProductController> _logger;
+    private readonly ILogger<StockedProductController> _logger;
     private readonly IUnopenedProductService _unopenedProductService;
-    public UnopenProductController(ILogger<UnopenProductController> logger, IUnopenedProductService unopenedProductService)
+    public StockedProductController(ILogger<StockedProductController> logger, IUnopenedProductService unopenedProductService)
     {
         _logger = logger;
         _unopenedProductService = unopenedProductService;

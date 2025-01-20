@@ -1,7 +1,7 @@
 using Diplomska.Persistence;
 using Diplomska.Persistence.Services;
 using Diplomska.Persistence.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
+using Diplomska.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,5 +32,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+DatabaseSeeder.SeedDatabase(app.Services);
 
 app.Run();

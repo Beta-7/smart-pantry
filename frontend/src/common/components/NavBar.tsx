@@ -1,38 +1,61 @@
-import React from 'react';
+import React, { useState } from 'react';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Container from '@mui/material/Container';
+import { useNavigate } from 'react-router-dom';
 
-export default function NavBar() {
+const Navbar = () => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const navigate = useNavigate();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleMenuOpen = (event:any) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = (page: string) => {
+    navigate(page);
+    setAnchorEl(null);
+  };
+
   return (
-    <header>
-        <div className="navbar-container">
-            <div className="logo">
-                <img ></img>
-            </div>
-            <div className="links">
+    <AppBar position="sticky">
+      <Container maxWidth="xl">
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+            onClick={handleMenuOpen}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+            anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+          >
+            <MenuItem onClick={ () => handleMenuClose('/fridge')}>Fridge</MenuItem>
+            <MenuItem onClick={ () => handleMenuClose('/openProducts')}>Open Products</MenuItem>
+            <MenuItem onClick={ () => handleMenuClose('/stockedProducts')}>Stocked Products</MenuItem>
+          </Menu>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            My Website
+          </Typography>
+          <Button color="inherit">Login</Button>
+        </Toolbar>
+      </Container>
+    </AppBar>
+  );
+};
 
-            </div>
-            <div className="account">
-
-            </div>
-        </div>
-    </header>
-  )
-}
-
-function FolderIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
-    </svg>
-  )
-}
+export default Navbar;

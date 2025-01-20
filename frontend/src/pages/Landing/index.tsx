@@ -1,6 +1,11 @@
-import React from 'react';
-import WithAction from '../../common/components/NavBar';
+/* eslint-disable react/react-in-jsx-scope */
+
+import NavBar from "../../common/components/NavBar"
+import Stats from "./Stats"
 
 export const Landing = () => {
-    return <WithAction/>
+    return <>
+        <NavBar/>
+        <Stats/>
+    </>
 }

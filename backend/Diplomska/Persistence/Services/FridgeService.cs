@@ -45,7 +45,7 @@ public class FridgeService: IFridgeService
         }
 
         _unopenedProductService.ConsumeUnopenedProduct(unopenedProduct.Id);
-        _openProductService.Add(new OpenProduct
+        _openProductService.Add(new OpenProductDto
         {
             ProductId = unopenedProduct.ProductId,
             RemainingWeight = product.Weight,

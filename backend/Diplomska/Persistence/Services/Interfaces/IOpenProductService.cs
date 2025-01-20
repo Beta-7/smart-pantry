@@ -4,10 +4,10 @@ namespace Diplomska.Persistence.Services.Interfaces;
 
 public interface IOpenProductService
 {
-    public bool Add(OpenProduct product);
+    public bool Add(OpenProductDto productDto);
     public bool Delete(Guid id);
-    public OpenProduct? GetDetails(Guid id);
-    public IEnumerable<OpenProduct> GetAll();
-    public bool Update(Guid id, OpenProduct updatedProduct);
-    public OpenProduct? GetByProductId(Guid productId);
+    public OpenProductDto? GetDetails(Guid id);
+    public IEnumerable<OpenProductDto> GetAll();
+    public bool Update(Guid id, OpenProductDto updatedProductDto);
+    public OpenProductDto? GetByProductId(Guid productId);
 }

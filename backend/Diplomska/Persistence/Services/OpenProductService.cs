@@ -10,11 +10,18 @@ public class OpenProductService: IOpenProductService
     {
         _context = context;
     }
-    public bool Add(OpenProduct product)
+    public bool Add(OpenProductDto productDto)
     {
         try
         {
-            _context.OpenProducts.Add(product);
+            var openProduct = new OpenProduct
+            {
+                ProductId = productDto.ProductId,
+                RemainingWeight = productDto.RemainingWeight,
+                ExpirationDate = productDto.ExpirationDate,
+                OpenDate = productDto.OpenDate
+            };
+            _context.OpenProducts.Add(openProduct);
             _context.SaveChanges();
             return true;
         }
@@ -44,27 +51,67 @@ public class OpenProductService: IOpenProductService
             return false;
         }
     }
-    public OpenProduct? GetDetails(Guid id)
+    public OpenProductDto? GetDetails(Guid id)
     {
-        return _context.OpenProducts.FirstOrDefault(x => x.Id == id);
+        var openProduct = _context.OpenProducts.FirstOrDefault(x => x.Id == id) 
+            ?? throw new Exception("Not found");
+        var product = _context.Products.FirstOrDefault(x => x.Id == openProduct.ProductId)
+            ?? throw new Exception("Not found");
+        return new OpenProductDto
+        {
+            Id = openProduct.Id,
+            LastModified = openProduct.LastModified,
+            Created = openProduct.Created,
+            Deleted = openProduct.Deleted,
+            ProductId = openProduct.ProductId,
+            Name = product.Name,
+            RemainingWeight = openProduct.RemainingWeight,
+            ExpirationDate = openProduct.ExpirationDate,
+            OpenDate = openProduct.OpenDate,
+            Weight = product.Weight,
+            DaysRemaining = 5
+        };
     }
 
-    public IEnumerable<OpenProduct> GetAll()
+    public IEnumerable<OpenProductDto> GetAll()
     {
-        return _context.OpenProducts;
+        var openProducts = new List<OpenProductDto>();
+        foreach (var openProduct in _context.OpenProducts)
+        {
+            var product = _context.Products.Find(openProduct.ProductId);
+            if (product is null)
+            {
+                continue;
+            }
+            var openProductDto = new OpenProductDto
+            {
+                Id = openProduct.Id,
+                LastModified = openProduct.LastModified,
+                Created = openProduct.Created,
+                ProductId = openProduct.ProductId,
+                Name = product.Name,
+                RemainingWeight = openProduct.RemainingWeight,
+                ExpirationDate = openProduct.ExpirationDate,
+                OpenDate = openProduct.OpenDate,
+                Weight = product.Weight,
+                DaysRemaining = (openProduct.ExpirationDate.ToDateTime(TimeOnly.MinValue) - DateTime.Today).Days
+            };
+            openProducts.Add(openProductDto);
+        }
+        return openProducts;
     }
 
-    public bool Update(Guid id, OpenProduct updatedProduct)
+    public bool Update(Guid id, OpenProductDto updatedProductDto)
     {
         try
         {
-            var product = GetDetails(id);
+            var product = _context.OpenProducts.Find(id);
             if (product is not null)
             {
-                product.ExpirationDate = updatedProduct.ExpirationDate;
-                product.OpenDate = updatedProduct.OpenDate;
-                product.ProductId = updatedProduct.ProductId;
-                product.RemainingWeight = updatedProduct.RemainingWeight;
+                product.ExpirationDate = updatedProductDto.ExpirationDate;
+                product.OpenDate = updatedProductDto.OpenDate;
+                product.ProductId = updatedProductDto.ProductId;
+                product.RemainingWeight = updatedProductDto.RemainingWeight;
                 _context.OpenProducts.Update(product);
                 _context.SaveChanges();
             }
@@ -76,8 +123,23 @@ public class OpenProductService: IOpenProductService
         }
     }
 
-    public OpenProduct? GetByProductId(Guid productId)
+    public OpenProductDto? GetByProductId(Guid productId)
     {
-        return _context.OpenProducts.FirstOrDefault(x => x.ProductId == productId);
+        var openProduct = _context.OpenProducts.FirstOrDefault(x => x.ProductId == productId);
+        var product = _context.Products.Find(openProduct.ProductId);
+        return new OpenProductDto
+        {
+            Id = openProduct.Id,
+            LastModified = openProduct.LastModified,
+            Created = openProduct.Created,
+            Deleted = openProduct.Deleted,
+            ProductId = openProduct.ProductId,
+            Name = product.Name,
+            RemainingWeight = openProduct.RemainingWeight,
+            ExpirationDate = openProduct.ExpirationDate,
+            OpenDate = openProduct.OpenDate,
+            Weight = product.Weight,
+            DaysRemaining = 5
+        };
     }
 }
