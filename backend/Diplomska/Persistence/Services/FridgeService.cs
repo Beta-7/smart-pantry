@@ -7,15 +7,15 @@ public class FridgeService: IFridgeService
 {
     private readonly DataContext _context;
     private readonly IOpenProductService _openProductService;
-    private readonly IUnopenedProductService _unopenedProductService;
+    private readonly IStockedProductService _stockedProductService;
     private readonly IProductService _productService;
 
     public FridgeService(DataContext context, IOpenProductService openProductService,
-        IUnopenedProductService unopenedProductService, IProductService productService)
+        IStockedProductService stockedProductService, IProductService productService)
     {
         _context = context;
         _openProductService = openProductService;
-        _unopenedProductService = unopenedProductService;
+        _stockedProductService = stockedProductService;
         _productService = productService;
     }
 
@@ -26,30 +26,30 @@ public class FridgeService: IFridgeService
     public void StockProduct(Guid productId, int quantity, DateOnly expirationDate)
     {
         var product = _productService.GetDetails(productId);
-        var unopenedProduct = new UnopenedProduct
+        var stockedProduct = new StockedProduct
         {
             ProductId = productId,
             Quantity = quantity,
             ExpirationDate = expirationDate
         };
-        _unopenedProductService.Add(unopenedProduct);
+        _stockedProductService.Add(stockedProduct);
     }
 
     public void OpenProduct(Guid productId)
     {
         var product = _productService.GetDetails(productId);
-        var unopenedProduct = _unopenedProductService.GetUnopenedProduct(productId);
-        if (unopenedProduct is null)
+        var stockedProduct = _stockedProductService.GetStockedProduct(productId);
+        if (stockedProduct is null)
         {
-            throw new Exception($"No unopened products with productId {productId}");
+            throw new Exception($"No stocked products with productId {productId}");
         }
 
-        _unopenedProductService.ConsumeUnopenedProduct(unopenedProduct.Id);
+        _stockedProductService.ConsumeStockedProduct(stockedProduct.Id);
         _openProductService.Add(new OpenProductDto
         {
-            ProductId = unopenedProduct.ProductId,
+            ProductId = stockedProduct.ProductId,
             RemainingWeight = product.Weight,
-            ExpirationDate = unopenedProduct.ExpirationDate,
+            ExpirationDate = stockedProduct.ExpirationDate,
             OpenDate = DateOnly.FromDateTime(DateTime.Now)
         });
     }

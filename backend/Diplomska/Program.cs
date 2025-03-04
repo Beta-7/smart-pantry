@@ -13,13 +13,21 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<IProductService, ProductService>();
-builder.Services.AddTransient<IUnopenedProductService, UnopenedProductService>();
+builder.Services.AddTransient<IStockedProductService, StockedProductService>();
 builder.Services.AddTransient<IOpenProductService, OpenProductService>();
 builder.Services.AddTransient<IFridgeService, FridgeService>();
 builder.Services.AddDbContext<DataContext>();
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173") // Your frontend URL
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 var app = builder.Build();
-
+app.UseCors("AllowFrontend");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

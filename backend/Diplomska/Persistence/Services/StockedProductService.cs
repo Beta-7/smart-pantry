@@ -3,18 +3,18 @@ using Diplomska.Persistence.Services.Interfaces;
 
 namespace Diplomska.Persistence.Services;
 
-public class UnopenedProductService: IUnopenedProductService
+public class StockedProductService: IStockedProductService
 {
     private readonly DataContext _context;
-    public UnopenedProductService(DataContext context)
+    public StockedProductService(DataContext context)
     {
         _context = context;
     }
-    public bool Add(UnopenedProduct product)
+    public bool Add(StockedProduct product)
     {
         try
         {
-            _context.UnopenedProducts.Add(product);
+            _context.StockedProducts.Add(product);
             _context.SaveChanges();
             return true;
         }
@@ -27,12 +27,12 @@ public class UnopenedProductService: IUnopenedProductService
     {
         try
         {
-            var product = _context.UnopenedProducts.FirstOrDefault(x => x.Id == id);
+            var product = _context.StockedProducts.FirstOrDefault(x => x.Id == id);
             if (product is not null)
             {
                 product.Deleted = true;
                 product.LastModified = DateTime.Now;
-                _context.UnopenedProducts.Update(product);
+                _context.StockedProducts.Update(product);
                 _context.SaveChanges();
                 return true;
             }
@@ -44,12 +44,12 @@ public class UnopenedProductService: IUnopenedProductService
             return false;
         }
     }
-    public UnopenedProduct? GetDetails(Guid id)
+    public StockedProduct? GetDetails(Guid id)
     {
-        return _context.UnopenedProducts.FirstOrDefault(x => x.Id == id);
+        return _context.StockedProducts.FirstOrDefault(x => x.Id == id);
     }
 
-    public bool Update(Guid id, UnopenedProduct updatedProduct)
+    public bool Update(Guid id, StockedProduct updatedProduct)
     {
         try
         {
@@ -59,7 +59,7 @@ public class UnopenedProductService: IUnopenedProductService
                 product.Quantity = updatedProduct.Quantity;
                 product.ExpirationDate = updatedProduct.ExpirationDate;
                 product.ProductId = updatedProduct.ProductId;
-                _context.UnopenedProducts.Update(product);
+                _context.StockedProducts.Update(product);
                 _context.SaveChanges();
             }
             return true;
@@ -70,17 +70,17 @@ public class UnopenedProductService: IUnopenedProductService
         }
     }
 
-    public UnopenedProduct? GetUnopenedProduct(Guid productId)
+    public StockedProduct? GetStockedProduct(Guid productId)
     {
-        return _context.UnopenedProducts.OrderByDescending(x => x.ExpirationDate).FirstOrDefault(x => x.ProductId == productId && !x.Deleted);
+        return _context.StockedProducts.OrderByDescending(x => x.ExpirationDate).FirstOrDefault(x => x.ProductId == productId && !x.Deleted);
     }
 
-    public void ConsumeUnopenedProduct(Guid unopenedProductId)
+    public void ConsumeStockedProduct(Guid stockedProductId)
     {
-        var product = GetDetails(unopenedProductId);
+        var product = GetDetails(stockedProductId);
         if (product is null)
         {
-            throw new Exception($"No unopened products with productId {unopenedProductId}");
+            throw new Exception($"No stocked products with productId {stockedProductId}");
         }
 
         product.Quantity--;
@@ -92,8 +92,8 @@ public class UnopenedProductService: IUnopenedProductService
         _context.SaveChanges();
     }
 
-    public IEnumerable<UnopenedProduct> GetAll()
+    public IEnumerable<StockedProduct> GetAll()
     {
-        return _context.UnopenedProducts;
+        return _context.StockedProducts;
     }
 }

@@ -12,5 +12,5 @@ public class DataContext : DbContext
     }
     public DbSet<Product> Products { get; set; }
     public DbSet<OpenProduct> OpenProducts { get; set; }
-    public DbSet<UnopenedProduct> UnopenedProducts { get; set; }
+    public DbSet<StockedProduct> StockedProducts { get; set; }
 }

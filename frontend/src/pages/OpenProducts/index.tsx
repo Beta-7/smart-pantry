@@ -1,4 +1,3 @@
-import React from 'react'
 import OpenProductsTable from './table'
 
 export const OpenProducts = () => {

@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import MaterialTable, { Column } from '@material-table/core';
-import { IOpenProduct } from '../../model/OpenProduct';
-import { OpenProductApi } from '../../dataAgent';
+import { StockedProductApi } from '../../dataAgent';
+import { IStockedProduct } from '../../model/StockedProduct';
 
 
 const OpenProductsTable: React.FC = () => {
-  const [data, setData] = useState<IOpenProduct[]>([]);
+  const [data, setData] = useState<IStockedProduct[]>([]);
 
   useEffect(()=>{
     const fetchData = async () => {
-      const resp = await OpenProductApi.all();
+      const resp = await StockedProductApi.all();
       setData(resp);
     };
     fetchData();
   },[])
 
-  const columns: Column<IOpenProduct>[] = [
+  const columns: Column<IStockedProduct>[] = [
     { title: 'Name', field: 'name' },
-    { title: 'Remaining Weight', field: 'remainingWeight', type: 'numeric' },
+    { title: 'Barcode', field: 'barcode'},
     { title: 'Expiration Date', field: 'expirationDate' },
-    { title: 'Open Date', field: 'openDate' },
+    { title: 'packagingWeight', field: 'packagingWeight', type: 'numeric' },
     { title: 'Weight', field: 'weight', type: 'numeric' },
-    { title: 'Days Remaining', field: 'daysRemaining', type: 'numeric' },
   ];
 
   return (

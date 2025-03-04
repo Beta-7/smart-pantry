@@ -75,46 +75,65 @@ public static class DatabaseSeeder
         }
         
         if (!context.OpenProducts.Any())
-            {
-                context.OpenProducts.AddRange(
-                    new OpenProduct
-                    {
-                        ProductId = milkGuid,
-                        RemainingWeight = 0.5m,
-                        ExpirationDate = DateOnly.FromDateTime(DateTime.Now.AddDays(3)),
-                        OpenDate = DateOnly.FromDateTime(DateTime.Now)
-                    },
-                    new OpenProduct
-                    {
-                        ProductId = butterGuid,
-                        RemainingWeight = 0.3m,
-                        ExpirationDate = DateOnly.FromDateTime(DateTime.Now.AddDays(7)),
-                        OpenDate = DateOnly.FromDateTime(DateTime.Now)
-                    },
-                    new OpenProduct
-                    {
-                        ProductId = cheeseGuid,
-                        RemainingWeight = 1.0m,
-                        ExpirationDate = DateOnly.FromDateTime(DateTime.Now.AddDays(15)),
-                        OpenDate = DateOnly.FromDateTime(DateTime.Now.AddDays(-5))
-                    },
-                    new OpenProduct
-                    {
-                        ProductId = yogurtGuid,
-                        RemainingWeight = 0.8m,
-                        ExpirationDate = DateOnly.FromDateTime(DateTime.Now.AddDays(5)),
-                        OpenDate = DateOnly.FromDateTime(DateTime.Now)
-                    },
-                    new OpenProduct
-                    {
-                        ProductId = breadGuid,
-                        RemainingWeight = 0.4m,
-                        ExpirationDate = DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
-                        OpenDate = DateOnly.FromDateTime(DateTime.Now)
-                    }
-                );
+        {
+            context.OpenProducts.AddRange(
+                new OpenProduct
+                {
+                    ProductId = milkGuid,
+                    RemainingWeight = 0.5m,
+                    ExpirationDate = DateOnly.FromDateTime(DateTime.Now.AddDays(3)),
+                    OpenDate = DateOnly.FromDateTime(DateTime.Now)
+                },
+                new OpenProduct
+                {
+                    ProductId = butterGuid,
+                    RemainingWeight = 0.3m,
+                    ExpirationDate = DateOnly.FromDateTime(DateTime.Now.AddDays(7)),
+                    OpenDate = DateOnly.FromDateTime(DateTime.Now)
+                },
+                new OpenProduct
+                {
+                    ProductId = cheeseGuid,
+                    RemainingWeight = 1.0m,
+                    ExpirationDate = DateOnly.FromDateTime(DateTime.Now.AddDays(15)),
+                    OpenDate = DateOnly.FromDateTime(DateTime.Now.AddDays(-5))
+                },
+                new OpenProduct
+                {
+                    ProductId = yogurtGuid,
+                    RemainingWeight = 0.8m,
+                    ExpirationDate = DateOnly.FromDateTime(DateTime.Now.AddDays(5)),
+                    OpenDate = DateOnly.FromDateTime(DateTime.Now)
+                },
+                new OpenProduct
+                {
+                    ProductId = breadGuid,
+                    RemainingWeight = 0.4m,
+                    ExpirationDate = DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
+                    OpenDate = DateOnly.FromDateTime(DateTime.Now)
+                }
+            );
 
-                context.SaveChanges();
-            }
+            context.SaveChanges();
+        }
+        if (!context.StockedProducts.Any())
+        {
+            context.StockedProducts.AddRange(
+                new StockedProduct
+                {
+                    ProductId = milkGuid,
+                    Quantity = 3,
+                    ExpirationDate = DateOnly.FromDateTime(DateTime.Now.AddDays(5)),
+                },
+                new StockedProduct
+                {
+                    ProductId = butterGuid,
+                    Quantity = 1,
+                    ExpirationDate = DateOnly.FromDateTime(DateTime.Now.AddDays(5)),
+                }
+            );
+            context.SaveChanges();
+
+        }
     }
 }

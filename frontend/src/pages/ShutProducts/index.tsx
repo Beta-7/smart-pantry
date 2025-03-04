@@ -1,5 +1,5 @@
-import React from 'react'
+import StockedProductsTable from './table'
 
-export const ShutProducts = () => {
-    return <p>I am the shut products!</p>
+export const StockedProducts = () => {
+    return <><p>I am the shut products!</p><StockedProductsTable></StockedProductsTable></>
 }
